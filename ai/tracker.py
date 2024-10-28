@@ -52,6 +52,8 @@ def main():
         if response:
             st.write("### LLaMA API Response")
             st.json(response)
+        else:
+            st.error("Failed to get a response from the LLaMA API.")
 
 if __name__ == "__main__":
     main()
