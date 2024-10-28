@@ -28,6 +28,9 @@ services:
       context: ./
       dockerfile: ai/Dockerfile
     container_name: ai-container
+    working_dir: /ai
+    volumes:
+      - ./ai/:/ai
 
   bot:
     build:
