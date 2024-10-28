@@ -8,11 +8,11 @@ import base64
 import streamlit as st
 import requests
 
+# Define the URL for the local LLaMA 3.2 API
+LLAMA_API_URL = "http://tower.nicolai.top:11434/api/generate"
 
-
-genai.configure(api_key='xxx')
+# USDA API Key
 USDA_API_KEY = "xxx"
-
 
 def extract_product_names(file):
     # Map MIME types to file extensions
@@ -33,46 +33,58 @@ def extract_product_names(file):
         temp_file.write(file.getbuffer())
         temp_file_path = temp_file.name
 
-    myfile = genai.upload_file(temp_file_path)
-    model = genai.GenerativeModel("gemini-1.5-flash")
+    # Prepare the payload for the LLaMA API
+    with open(temp_file_path, "rb") as image_file:
+        image_data = base64.b64encode(image_file.read()).decode('utf-8')
 
-    result = model.generate_content(
-        [myfile, "\\n\\n", "Please extract all eatable product names from this receipt."],
-        generation_config=genai.GenerationConfig(
-            response_mime_type="application/json",
-            response_schema=list[str]
-        ),
-    )
-    return result.text
+    payload = {
+        "image": image_data,
+        "prompt": "Please extract all eatable product names from this receipt."
+    }
+
+    # Send the request to the LLaMA API
+    response = requests.post(LLAMA_API_URL, json=payload)
+    result = response.json()
+
+    if "product_names" in result:
+        return result["product_names"]
+    else:
+        st.error("Failed to extract product names.")
+        return None
 
 def clean_product_names(product_list):
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    result_clean = model.generate_content(
-        [f"Please suggest clean, simple names for product names from this list: {product_list}"],
-        generation_config=genai.GenerationConfig(
-            response_mime_type="application/json",
-            response_schema=list[str]
-        ),
-    )
-    return result_clean.text
+    # Prepare the payload for the LLaMA API
+    payload = {
+        "prompt": f"Please suggest clean, simple names for product names from this list: {product_list}"
+    }
 
-# def get_calories_from_usda(food_name, api_key=USDA_API_KEY):
-#     url = "https://api.nal.usda.gov/fdc/v1/foods/search"
-#     params = {
-#         "query": food_name,
-#         "pageSize": 1,
-#         "api_key": api_key
-#     }
-#     response = requests.get(url, params=params)
-#     data = response.json()
+    # Send the request to the LLaMA API
+    response = requests.post(LLAMA_API_URL, json=payload)
+    result = response.json()
 
-#     if "foods" in data and data["foods"]:
-#         food_data = data["foods"][0]
-#         description = food_data.get("description", "Unknown item")
-#         calories = food_data.get("foodNutrients", [{}])[0].get("value", "Calories not found")
-#         return description, calories
-#     else:
-#         return "Item not found", "Calories not found"
+    if "cleaned_names" in result:
+        return result["cleaned_names"]
+    else:
+        st.error("Failed to clean product names.")
+        return None
+
+def get_calories_from_usda(food_name, api_key=USDA_API_KEY):
+    url = "https://api.nal.usda.gov/fdc/v1/foods/search"
+    params = {
+        "query": food_name,
+        "pageSize": 1,
+        "api_key": api_key
+    }
+    response = requests.get(url, params=params)
+    data = response.json()
+
+    if "foods" in data and data["foods"]:
+        food_data = data["foods"][0]
+        description = food_data.get("description", "Unknown item")
+        calories = food_data.get("foodNutrients", [{}])[0].get("value", "Calories not found")
+        return description, calories
+    else:
+        return "Item not found", "Calories not found"
 
 def run_calorie_tracker_app():
     st.title("AIU - Calorie Tracker")
