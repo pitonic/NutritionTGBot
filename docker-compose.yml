@@ -23,6 +23,12 @@ services:
     ports:
       - "5432:5432"
 
+  AI:
+    build:
+      context: ./
+      dockerfile: AI/Dockerfile
+    container_name: AI-container
+
   bot:
     build:
       context: ./
