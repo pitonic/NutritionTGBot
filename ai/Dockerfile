@@ -1,6 +1,6 @@
 FROM python:3.10-slim
 
-COPY ./AI/requirements.txt requirements.txt
+COPY ./ai/requirements.txt requirements.txt
 
 RUN apt update && \
     apt install --no-install-recommends -y gcc libgl1 libglib2.0-0 libpython3-dev gnupg && \
