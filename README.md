@@ -11,7 +11,7 @@ mv demo.env .env
 ```
 
 ```
-.env должен содержать URL базы данных и токен Telegram бота 
+.env должен содержать URL базы данных и токен Telegram бота
 ```
 
 ```
@@ -32,8 +32,10 @@ python3 bot.py # Linux
 docker compose up --build -d
 ```
 
+```
 [+] Running 4/4
  ✔ Network nutritiontgbot_default  Created                  xxx.3s
  ✔ Container postgres-container    Started                  xxx.6s
  ✔ Container ollama-container      Started                  xxx.6s
  ✔ Container bot-container         Started                  xxx.6s
+```
