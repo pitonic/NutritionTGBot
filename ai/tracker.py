@@ -3,19 +3,25 @@ import requests
 import base64
 import tempfile
 from PIL import Image
-import io
+import os
 
 # Define the URL for the local LLaMA 3.2 API
 LLAMA_API_URL = "http://tower:11434/api/generate"
 
 def encode_image_to_base64(image_file):
-    with tempfile.NamedTemporaryFile(delete=False, suffix=image_file.name.split('.')[-1]) as temp_file:
+    # Create a temporary file to store the uploaded image
+    file_extension = '.' + image_file.name.split('.')[-1]
+    with tempfile.NamedTemporaryFile(delete=False, suffix=file_extension) as temp_file:
         temp_file.write(image_file.getbuffer())
         temp_file_path = temp_file.name
 
-    with open(temp_file_path, "rb") as image_file:
-        image_data = base64.b64encode(image_file.read()).decode('utf-8')
+    # Read the temporary file and encode it in base64
+    with open(temp_file_path, "rb") as img_file:
+        image_data = base64.b64encode(img_file.read()).decode('utf-8')
 
+    # Clean up the temporary file
+    os.remove(temp_file_path)
+    
     return image_data
 
 def send_to_llama_api(image_data):
@@ -38,6 +44,7 @@ def main():
     st.title("LLaMA API Image Analysis")
     st.write("Upload an image to analyze it.")
 
+    # File uploader widget
     uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png", "webp", "heic", "heif"])
 
     if uploaded_file is not None:
