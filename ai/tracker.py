@@ -30,7 +30,7 @@ def send_to_llama_api(image_data):
     """
     payload = {
         "model": "minicpm-v",
-        "prompt": "Извлеките все названия съедобных продуктов из этого чека на русском языке.",
+        "prompt": "extract all text from the image",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
