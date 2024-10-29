@@ -3,7 +3,7 @@ import requests
 import base64
 from PIL import Image
 import os
-import tempfile
+import tempfile  # Add this import
 
 # Define the URL for the local LLaMA 3.2 API
 LLAMA_API_URL = "http://ollama:11434/api/generate"
