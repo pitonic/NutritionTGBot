@@ -29,8 +29,8 @@ def send_to_llama_api(image_data):
     Send the base64 encoded image to the LLaMA API and return the response.
     """
     payload = {
-        "model": "llava-llama3",
-        "prompt": "Please extract all eatable product names from this receipt.",
+        "model": "llama3.2",
+        "prompt": "for text extractions use Russian languge. extract all eatable product names from this receipt.",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
