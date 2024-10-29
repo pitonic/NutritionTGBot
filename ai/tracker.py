@@ -30,11 +30,11 @@ def send_to_llama_api(image_data):
     """
     payload = {
         "model": "llava-llama3",
-        "prompt": "What is in this picture?",
+        "prompt": "need only text from this picture?",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
-    st.write("image-b64:", image_data)
+
     # Debugging: Print the payload
     st.write("Payload sent to LLaMA API:", payload)
 
