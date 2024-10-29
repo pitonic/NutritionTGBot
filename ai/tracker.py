@@ -15,7 +15,7 @@ def encode_image_to_base64(image_file):
     image_data = image_file.read()
     return base64.b64encode(image_data).decode('utf-8')
 
-def send_to_llama_api(image_data):
+def send_to_llama_api(b64image_data):
     """
     Send the base64 encoded image to the LLaMA API and return the response.
     """
@@ -23,7 +23,7 @@ def send_to_llama_api(image_data):
         "model": "llava-llama3",
         "prompt": "What is in this picture?",
         "stream": False,
-        "images": [image_data]  # Ensure this contains the base64 string
+        "images": [b64image_data]  # Ensure this contains the base64 string
     }
 
     # Debugging: Print the payload
@@ -50,8 +50,8 @@ def main():
         st.image(image, caption='Uploaded Image.', use_column_width=True)
 
         st.write("### Processing Image...")
-        image_data = encode_image_to_base64(uploaded_file)  # Encode the image
-        response = send_to_llama_api(image_data)  # Send to LLaMA API
+        b64image_data = encode_image_to_base64(uploaded_file)  # Encode the image
+        response = send_to_llama_api(b64image_data)  # Send to LLaMA API
 
         if response:
             st.write("### LLaMA API Response")
