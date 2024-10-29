@@ -21,7 +21,7 @@ def encode_image_to_base64(image_file):
 
     # Clean up the temporary file
     os.remove(temp_file_path)
-    
+
     return image_data
 
 def send_to_llama_api(image_data):
