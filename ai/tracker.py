@@ -30,7 +30,7 @@ def send_to_llama_api(image_data):
     """
     payload = {
         "model": "llava-llama3",
-        "prompt": "need only text from this picture?",
+        "prompt": "Please extract all eatable product names from this receipt.",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
