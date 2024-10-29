@@ -1,12 +1,12 @@
 import streamlit as st
-import httpx
+import requests
 import base64
 import tempfile
 from PIL import Image
 import io
 
 # Define the URL for the local LLaMA 3.2 API
-LLAMA_API_URL = "http://tower:11434/api/generate"
+LLAMA_API_URL = "http://ollama:11434/api/generate"
 
 def encode_image_to_base64(image_file):
     with tempfile.NamedTemporaryFile(delete=False, suffix=image_file.name.split('.')[-1]) as temp_file:
@@ -23,14 +23,14 @@ def send_to_llama_api(image_data):
         "model": "llava-llama3",
         "prompt": "What is in this picture?",
         "stream": False,
-        "images": [image_data]  # Ensure this is a list
+        "images": [image_data]
     }
 
     try:
-        response = httpx.post(LLAMA_API_URL, json=payload)
+        response = requests.post(LLAMA_API_URL, json=payload)
         response.raise_for_status()  # Raise an exception for HTTP errors
         return response.json()
-    except httpx.RequestError as e:
+    except requests.exceptions.RequestException as e:
         st.error(f"Error connecting to LLaMA API: {e}")
         return None
 
