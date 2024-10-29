@@ -30,7 +30,7 @@ def send_to_llama_api(image_data):
     """
     payload = {
         "model": "minicpm-v",
-        "prompt": "extract all text from the image",
+        "prompt": "Extract all text from the receipt. Ensure all words and product names are in Russian, using the Cyrillic alphabet. Convert all letters to lowercase. Identify and extract all eatable product names. Suggest clean, simple names for each product. Print all in JSON format.",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
