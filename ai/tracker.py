@@ -29,7 +29,7 @@ def send_to_llama_api(image_data):
     Send the base64 encoded image to the LLaMA API and return the response.
     """
     payload = {
-        "model": "llava-llama3:8b-v1.1-fp16",
+        "model": "minicpm-v",
         "prompt": "Извлеките все названия съедобных продуктов из этого чека на русском языке.",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
