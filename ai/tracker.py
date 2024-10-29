@@ -3,11 +3,15 @@ import requests
 import base64
 from PIL import Image
 import os
+import tempfile
 
 # Define the URL for the local LLaMA 3.2 API
 LLAMA_API_URL = "http://ollama:11434/api/generate"
 
 def encode_image_to_base64(image_file):
+    """
+    Encode the uploaded image to a base64 string.
+    """
     with tempfile.NamedTemporaryFile(delete=False, suffix=image_file.name.split('.')[-1]) as temp_file:
         temp_file.write(image_file.getbuffer())
         temp_file_path = temp_file.name
@@ -15,9 +19,12 @@ def encode_image_to_base64(image_file):
     with open(temp_file_path, "rb") as image_file:
         image_data = base64.b64encode(image_file.read()).decode('utf-8')
 
+    # Clean up the temporary file
+    os.remove(temp_file_path)
+
     return image_data
 
-def send_to_llama_api(b64image_data):
+def send_to_llama_api(image_data):
     """
     Send the base64 encoded image to the LLaMA API and return the response.
     """
@@ -25,9 +32,9 @@ def send_to_llama_api(b64image_data):
         "model": "llava-llama3",
         "prompt": "What is in this picture?",
         "stream": False,
-        "images": [b64image_data]  # Ensure this contains the base64 string
+        "images": [image_data]  # Ensure this contains the base64 string
     }
-    st.write("image-b64:", b64image_data)
+    st.write("image-b64:", image_data)
     # Debugging: Print the payload
     st.write("Payload sent to LLaMA API:", payload)
 
@@ -51,8 +58,8 @@ def main():
         st.image(image, caption='Uploaded Image.', use_column_width=True)
 
         st.write("### Processing Image...")
-        b64image_data = encode_image_to_base64(uploaded_file)  # Encode the image
-        response = send_to_llama_api(b64image_data)  # Send to LLaMA API
+        image_data = encode_image_to_base64(uploaded_file)  # Encode the image
+        response = send_to_llama_api(image_data)  # Send to LLaMA API
 
         if response:
             st.write("### LLaMA API Response")
