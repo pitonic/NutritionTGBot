@@ -23,7 +23,7 @@ def send_to_llama_api(image_data):
         "model": "llava-llama3",
         "prompt": "What is in this picture?",
         "stream": False,
-        "images": [image_data]
+        "images": [image_data]  # Ensure this contains the base64 string
     }
 
     # Debugging: Print the payload
