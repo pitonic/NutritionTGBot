@@ -25,7 +25,7 @@ def send_to_llama_api(b64image_data):
         "stream": False,
         "images": [b64image_data]  # Ensure this contains the base64 string
     }
-
+    st.write("image-b64:", b64image_data)
     # Debugging: Print the payload
     st.write("Payload sent to LLaMA API:", payload)
 
