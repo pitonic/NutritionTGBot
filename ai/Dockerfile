@@ -9,4 +9,5 @@ RUN apt update && \
     rm -rf /var/lib/apt/lists/*
 
 #CMD ["bash", "-c", "sleep infinity"]
-CMD ["bash", "-c", "streamlit run tracker.py"]
+#CMD ["bash", "-c", "streamlit run tracker.py"]
+CMD ["bash", "-c", "streamlit run ocrmac.py"]
