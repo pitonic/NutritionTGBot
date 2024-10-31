@@ -24,13 +24,29 @@ def encode_image_to_base64(image_file):
 
     return image_data
 
+
+
+prompt_text = """
+### Instruction:
+You are POS receipt data expert, parse using English and Russian language,
+detect eatable product, Suggest correct names for each product.
+Recognize and convert following receipt OCR image result into structure receipt data object.
+ignore "НДС"-info, "payment_*", Locations and store info.
+Don't make up value not in the Input. Output must be a well-formed JSON object. ```json
+
+### Input:
+use response as input
+
+"""
+
+
 def send_to_llama_api(image_data):
     """
     Send the base64 encoded image to the LLaMA API and return the response.
     """
     payload = {
         "model": "aiden_lu/minicpm-v2.6:Q4_K_M",
-        "prompt": "Extract all text from the receipt. Ensure all words and product names are in Russian, using the Cyrillic alphabet. Convert all letters to lowercase. Identify and extract all eatable product names. Suggest clean, simple names for each product. Print all in JSON format.",
+        "prompt": prompt_text,
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
     }
