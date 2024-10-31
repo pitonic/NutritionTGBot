@@ -34,6 +34,26 @@ services:
     ports:
       - "8501:8501"
 
+  macos:
+    build:
+      context: ./
+      dockerfile: macos/Dockerfile
+    container_name: macos-container
+    working_dir: /macos
+    volumes:
+      - ./macos/:/macos
+    environment:
+      VERSION: "Sequoia"
+    devices:
+      - /dev/kvm
+    cap_add:
+      - NET_ADMIN
+    ports:
+      - 8006:8006
+      - 5900:5900/tcp
+      - 5900:5900/udp
+    stop_grace_period: 2m
+
   bot:
     build:
       context: ./
