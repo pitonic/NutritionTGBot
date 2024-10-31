@@ -1,1 +1,4 @@
 ocrmac
+homebrew
+pip3
+git
