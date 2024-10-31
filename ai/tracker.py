@@ -32,10 +32,7 @@ You are POS receipt data expert, parse using English and Russian language,
 detect eatable product, Suggest correct names for each product.
 Recognize and convert following receipt OCR image result into structure receipt data object.
 ignore "НДС"-info, "payment_*", Locations and store info.
-Don't make up value not in the Input. Output must be a well-formed JSON object. ```json
-
-### Input:
-use response as input
+Don't make up value not in the Input. Output must be a well-formed JSON object.
 
 """
 
