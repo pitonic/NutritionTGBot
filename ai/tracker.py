@@ -29,7 +29,7 @@ def send_to_llama_api(image_data):
     Send the base64 encoded image to the LLaMA API and return the response.
     """
     payload = {
-        "model": "minicpm-v",
+        "model": "aiden_lu/minicpm-v2.6:Q4_K_M",
         "prompt": "Extract all text from the receipt. Ensure all words and product names are in Russian, using the Cyrillic alphabet. Convert all letters to lowercase. Identify and extract all eatable product names. Suggest clean, simple names for each product. Print all in JSON format.",
         "stream": False,
         "images": [image_data]  # Ensure this contains the base64 string
