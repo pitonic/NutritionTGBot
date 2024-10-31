@@ -1,5 +1,5 @@
 streamlit
-#google-generativeai
 requests
 pillow
 ocrmac
+pyobjc-framework-Vision

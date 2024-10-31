@@ -3,10 +3,8 @@ FROM python:3.8-slim
 COPY ./ai/requirements.txt requirements.txt
 
 RUN apt update && \
-    apt install --no-install-recommends -y gcc libgl1 libglib2.0-0 libpython3-dev gnupg && \
     pip install --upgrade pip && \
-    pip install --no-cache-dir -r requirements.txt && \
-    rm -rf /var/lib/apt/lists/*
+    pip install --no-cache-dir -r requirements.txt
 
 #CMD ["bash", "-c", "sleep infinity"]
 #CMD ["bash", "-c", "streamlit run tracker.py"]
