@@ -1,12 +1,27 @@
 import streamlit as st
 import requests
 import base64
-from PIL import Image
+from PIL import Image, ImageFilter
 import os
-import tempfile  # Add this import
+import tempfile
+import cv2
+import numpy as np
 
 # Define the URL for the local LLaMA 3.2 API
 LLAMA_API_URL = "http://ollama:11434/api/generate"
+
+def preprocess_image(image):
+    """
+    Pre-process the image for better OCR accuracy.
+    Convert to grayscale and apply sharpening.
+    """
+    # Convert to grayscale
+    image = image.convert('L')
+    
+    # Apply sharpening filter
+    image = image.filter(ImageFilter.SHARPEN)
+    
+    return image
 
 def encode_image_to_base64(image_file):
     """
@@ -16,30 +31,27 @@ def encode_image_to_base64(image_file):
         temp_file.write(image_file.getbuffer())
         temp_file_path = temp_file.name
 
-    with open(temp_file_path, "rb") as image_file:
+    # Pre-process the image
+    image = Image.open(temp_file_path)
+    image = preprocess_image(image)
+    
+    # Save the pre-processed image to a temporary file
+    preprocessed_temp_file_path = temp_file_path + "_preprocessed.png"
+    image.save(preprocessed_temp_file_path)
+
+    with open(preprocessed_temp_file_path, "rb") as image_file:
         image_data = base64.b64encode(image_file.read()).decode('utf-8')
 
-    # Clean up the temporary file
+    # Clean up the temporary files
     os.remove(temp_file_path)
+    os.remove(preprocessed_temp_file_path)
 
     return image_data
-
-
-# prompt_text = """
-# ### Instruction:
-# You are POS receipt data expert, parse using English and Russian language,
-# detect eatable product, Suggest correct names for each product.
-# Recognize and convert following receipt OCR image result into structure receipt data object.
-# ignore "НДС"-info, "payment_*", Locations and store info.
-# Don't make up value not in the Input. Output must be a well-formed JSON object.
-# """
-
 
 prompt_text = """
 ### Instruction:
 extract all text in image Russian language
 """
-
 
 def send_to_llama_api(image_data):
     """
